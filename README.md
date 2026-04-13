@@ -44,6 +44,15 @@ Track: **Hardware for AI**. Meant to plug into `edge-llm-eval-harness` as an `fp
 
 ---
 
+### 🔋 [rl-power-converter](https://github.com/JacobFlorio/rl-power-converter)
+**On a linear buck converter with a known model, a grid-search-tuned PID beats both a BPTT-trained and a CEM-trained MLP policy on every metric at every tested operating point — and the reason is that the neural policies have no integrator (13–21% steady-state error out-of-distribution vs ~0.03% for PID).**
+
+Pure-torch differentiable averaged-model buck converter simulator, three controllers compared on the same load-step transient: tuned PID (Kp=8, Ki=1.25, Kd=4e-4 via grid search), a BPTT-trained MLP (trains the policy by backprop through the simulator, within 1% of PID on aggregate loss), and a CEM-trained MLP (model-free, 12% gap). The honest answer to "does deep RL beat PID?" on a linear plant with a pure tracking objective is **no — and not because the RL is badly implemented, but because PID's integrator is the right structural prior for the problem.** The writeup includes a discussion of when the published "RL beats PID" results actually apply (non-linear topologies, combined objectives) and a concrete roadmap for a HIL rig that would make the comparison more interesting.
+
+Track: **Power electronics × RL**. An honest negative-ish result where the method lesson matters more than the scoreboard.
+
+---
+
 ## In-progress projects (scaffolded here)
 
 Each of the projects below has a README with a research question and runnable starter code, and will be promoted to its own repository once it has shippable results.
@@ -52,7 +61,6 @@ Each of the projects below has a README with a research question and runnable st
 |---|---|---|
 | [neural-rf-frontend](neural-rf-frontend/) | RF / SDR | Can a <500k-param CNN classify modulation at sub-0 dB SNR on an RTL-SDR? |
 | [tinyml-edge-anomaly](tinyml-edge-anomaly/) | Embedded | Sub-100 µJ/inference bearing fault detection on Cortex-M4? |
-| [rl-power-converter](rl-power-converter/) | Power electronics | Does deep RL beat tuned PID on buck converter load transients? |
 | [neural-beamforming-phased-array](neural-beamforming-phased-array/) | RF / DSP | Can a learned beamformer match MVDR with 10× lower latency? |
 
 ## Focus
