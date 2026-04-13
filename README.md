@@ -26,13 +26,21 @@ Track: **Evaluation × hardware for AI**. Working CUDA backends at FP16/INT8/INT
 
 ---
 
+### 📡 [sae-rf-classifier](https://github.com/JacobFlorio/sae-rf-classifier)
+**A TopK SAE trained on a CNN modulation classifier rediscovers classical cumulant and envelope features — 3.7× more correlated with the classical feature set than matched PCA directions.**
+
+When you train a sparse autoencoder on the penultimate activations of a CNN that classifies 11 digital modulation schemes, its features match the Swami-Sadler (2000) hand-designed cumulant/envelope feature set with mean max-|r| of 0.545 vs PCA's 0.148. The SAE concentrates specifically on phase statistics, envelope variance, and higher-order cumulants — the features textbook modulation-recognition algorithms used before deep learning. A rare falsifiable SAE interpretability result in a non-language domain, with a known analytical ground truth.
+
+Track: **Interpretability × EE**. Companion to `mech-interp-tiny-transformer`.
+
+---
+
 ## In-progress projects (scaffolded here)
 
 Each of the projects below has a README with a research question and runnable starter code, and will be promoted to its own repository once it has shippable results.
 
 | Project | Track | Research question |
 |---|---|---|
-| [sae-rf-classifier](sae-rf-classifier/) | Interp × EE | Do sparse-autoencoder features on a CNN modulation classifier match classical cyclostationary features? |
 | [neural-rf-frontend](neural-rf-frontend/) | RF / SDR | Can a <500k-param CNN classify modulation at sub-0 dB SNR on an RTL-SDR? |
 | [fpga-transformer-accel](fpga-transformer-accel/) | Hardware for AI | Energy-per-token floor for INT8 transformer inference on a mid-range FPGA? |
 | [tinyml-edge-anomaly](tinyml-edge-anomaly/) | Embedded | Sub-100 µJ/inference bearing fault detection on Cortex-M4? |
