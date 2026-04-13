@@ -77,6 +77,10 @@ class TinyTransformer(nn.Module):
         self.pos_embed = nn.Embedding(cfg.n_ctx, cfg.d_model)
         self.blocks = nn.ModuleList([Block(cfg) for _ in range(cfg.n_layers)])
         self.unembed = nn.Linear(cfg.d_model, cfg.vocab_size, bias=False)
+        scale = cfg.d_model ** -0.5
+        nn.init.normal_(self.tok_embed.weight, std=scale)
+        nn.init.normal_(self.pos_embed.weight, std=scale)
+        nn.init.normal_(self.unembed.weight, std=scale)
 
     def forward(self, tokens):  # [B, T]
         B, T = tokens.shape
