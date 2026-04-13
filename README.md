@@ -27,11 +27,20 @@ Track: **Evaluation × hardware for AI**. Working CUDA backends at FP16/INT8/INT
 ---
 
 ### 📡 [sae-rf-classifier](https://github.com/JacobFlorio/sae-rf-classifier)
-**A TopK SAE trained on a CNN modulation classifier rediscovers classical cumulant and envelope features — 3.7× more correlated with the classical feature set than matched PCA directions.**
+**A TopK SAE trained on a CNN modulation classifier rediscovers classical cumulant and envelope features — 3.83× more correlated with the classical feature set than matched PCA directions (5-seed median), and a causal ablation shows each classical family is load-bearing for the specific modulations classical theory says it should be.**
 
-When you train a sparse autoencoder on the penultimate activations of a CNN that classifies 11 digital modulation schemes, its features match the Swami-Sadler (2000) hand-designed cumulant/envelope feature set with mean max-|r| of 0.545 vs PCA's 0.148. The SAE concentrates specifically on phase statistics, envelope variance, and higher-order cumulants — the features textbook modulation-recognition algorithms used before deep learning. A rare falsifiable SAE interpretability result in a non-language domain, with a known analytical ground truth.
+When you train a sparse autoencoder on the penultimate activations of a CNN that classifies 11 digital modulation schemes, its features match the Swami-Sadler (2000) hand-designed cumulant/envelope feature set with mean max-|r| of 0.50 (5-seed median) vs PCA's 0.13. Multi-seed causal ablation: `C41_mag` → BPSK is unanimous across 5 seeds (median Δ −1.00), `phase_std` → CPFSK likewise (median Δ −0.99), `spec_bandwidth` → 8PSK/QAM16 (5/5), `env_var` → QAM16 (5/5). A rare falsifiable SAE interpretability result in a non-language domain with a known analytical ground truth.
 
 Track: **Interpretability × EE**. Companion to `mech-interp-tiny-transformer`.
+
+---
+
+### ⚡ [fpga-transformer-accel](https://github.com/JacobFlorio/fpga-transformer-accel)
+**Bit-accurate Python simulator of a parameterized INT8 systolic MAC array with roofline + 28nm energy analysis — gpt2-small at 41 μJ/token, gpt2-nano at 0.6 μJ/token at batch 128.**
+
+A cycle-accurate Python simulator of a parameterized NxN INT8 systolic array, validated bit-for-bit against `torch.int32` matmul for every shape, with cycle counting through full transformer forward passes. Produces throughput sweeps across array sizes (gpt2-small holds ~33% MAC utilization up to N=256, gpt2-nano collapses past N=64), classic compute-vs-bandwidth roofline plots, and 28nm-CMOS energy-per-token projections from Horowitz 2014 constants. The canonical finding — **weight DRAM dominates inference energy at batch 1, and batch amortization is how you claw it back** — is the right first-order lesson for anyone building inference accelerators. The SystemVerilog RTL in `src/rtl/` encodes the same per-cell behavior the simulator models; cocotb cross-check is the next step.
+
+Track: **Hardware for AI**. Meant to plug into `edge-llm-eval-harness` as an `fpga_systolic` backend so the same quantized model runs across CUDA, llama.cpp, and the simulated accelerator through one eval harness.
 
 ---
 
@@ -42,7 +51,6 @@ Each of the projects below has a README with a research question and runnable st
 | Project | Track | Research question |
 |---|---|---|
 | [neural-rf-frontend](neural-rf-frontend/) | RF / SDR | Can a <500k-param CNN classify modulation at sub-0 dB SNR on an RTL-SDR? |
-| [fpga-transformer-accel](fpga-transformer-accel/) | Hardware for AI | Energy-per-token floor for INT8 transformer inference on a mid-range FPGA? |
 | [tinyml-edge-anomaly](tinyml-edge-anomaly/) | Embedded | Sub-100 µJ/inference bearing fault detection on Cortex-M4? |
 | [rl-power-converter](rl-power-converter/) | Power electronics | Does deep RL beat tuned PID on buck converter load transients? |
 | [neural-beamforming-phased-array](neural-beamforming-phased-array/) | RF / DSP | Can a learned beamformer match MVDR with 10× lower latency? |
