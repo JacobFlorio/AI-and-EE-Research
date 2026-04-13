@@ -88,3 +88,17 @@ class TinyTransformer(nn.Module):
         for block in self.blocks:
             x = block(x)
         return self.unembed(x)
+
+    @torch.no_grad()
+    def residual_last(self, tokens):
+        """Residual-stream activations at the last token after all blocks.
+
+        Hook point for SAE training — the final representation of the '='
+        position, right before the unembedding. Shape: [B, d_model].
+        """
+        B, T = tokens.shape
+        pos = torch.arange(T, device=tokens.device)
+        x = self.tok_embed(tokens) + self.pos_embed(pos)[None]
+        for block in self.blocks:
+            x = block(x)
+        return x[:, -1, :]
