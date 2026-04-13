@@ -3,7 +3,7 @@
 **Status:** First-pass replication complete. Next: SAE feature recovery.
 
 ## TL;DR
-A one-layer, 128-dim transformer trained on modular addition mod 113 exhibits a textbook grokking phase transition and, at the end of training, concentrates **95% of its token-embedding Fourier power on just five key frequencies** (k = 19, 36, 49, 56, plus a residual k = 1). Each appears as a sin/cos pair, which is the exact signature of the Fourier-multiplication circuit identified by Nanda et al. (2023). The network rediscovered the DFT as the generalizing solution to `(a + b) mod p`.
+A one-layer, 128-dim transformer trained on modular addition mod 113 exhibits a textbook grokking phase transition. After grokking, **both the token embedding `W_E` and the unembedding `W_U` concentrate on the same four key Fourier frequencies** of Z/113Z (k = 19, 36, 49, 56), with 95% of `W_E`'s power on those four frequencies plus a residual k = 1. Each frequency appears as a cos/sin pair on both sides of the network. This matches the signature of the Fourier-multiplication circuit identified by Nanda et al. (2023): the input side embeds numbers on a few frequencies, the output side reads out the result on the same frequencies, and the middle of the network does the `a + b` computation via trig identities.
 
 ## Setup
 - **Task:** predict `(a + b) mod p` from the sequence `[a, b, =]`, with `p = 113`.
@@ -32,10 +32,20 @@ After training, the token-embedding matrix `W_E ∈ R^{113×128}` is projected o
 | 19 | 18.9      | 20.6      | 21.0%             |
 |  1 |  2.4      |  3.2      |  3.0%             |
 
-The sin/cos pairing at each frequency is the interpretability signal: it means the embedding is literally `[cos(2πk·a/p), sin(2πk·a/p)]` for each selected k, which is the representation that makes `a + b` computable via the trig identities `cos(α+β) = cos α cos β − sin α sin β` and the analogous sine expansion. The MLP and attention then implement exactly that multiplication, and the unembedding reads out the answer.
+The sin/cos pairing at each frequency is the interpretability signal: it means the embedding is literally `[cos(2πk·a/p), sin(2πk·a/p)]` for each selected k, which is the representation that makes `a + b` computable via the trig identities `cos(α+β) = cos α cos β − sin α sin β` and the analogous sine expansion. Per Nanda et al., the MLP implements exactly that multiplication and the unembedding reads out the answer; I verified the input and output structure directly (see below) but have not yet dissected the MLP to confirm the multiplication step in my own run — that's in the "next" list.
+
+### The unembedding has matching structure
+A stronger version of the same check: project the unembedding matrix `W_U ∈ R^{114×128}` onto the Fourier basis. Its top 7 non-DC components are at exactly the same indices as `W_E`'s — 37/38 (k=19), 71/72 (k=36), 97/98 (k=49), 111/112 (k=56). The output side of the network lives on the same four-frequency subspace as the input side, which is what you'd expect if the network is implementing a trig-identity circuit: both sides have to agree on which frequencies are "in use."
+
+```
+W_E top freqs (idx, power): (71, 26.9) (72, 25.2) (38, 20.6) (98, 20.5) (111, 20.5) (112, 20.2) (37, 18.9) (97, 18.7)
+W_U top freqs (idx, power): ( 0,  9.5) (112,  4.0) (37,  3.8) (71,  3.4) (38,  3.3) (111,  3.1) (72,  2.9) (98,  2.9)
+```
+
+The DC component (idx 0) in `W_U` is expected — it's the overall output bias. Everything else lines up.
 
 ## What this replicates
-The key-frequency structure, the phase-transition shape, and the near-total concentration of power on a small handful of frequencies all match Nanda et al. 2023 "Progress measures for grokking via mechanistic interpretability." My chosen frequencies (19, 36, 49, 56) are not the same as the paper's (they're random across seeds) but the count and the sin/cos pairing are the load-bearing structural claims, and both hold.
+The key-frequency structure, the phase-transition shape, the near-total concentration of power on a small handful of frequencies, and the matching Fourier structure on both embedding sides all match Nanda et al. 2023 "Progress measures for grokking via mechanistic interpretability." My specific frequencies (19, 36, 49, 56) are seed-dependent and don't match the paper's, but the count, the sin/cos pairing, and the input/output agreement are the load-bearing structural claims, and all hold.
 
 ## What I want to push on next
 1. **SAE feature recovery.** Train a TopK sparse autoencoder on residual-stream activations at step 17k (just after grokking) and at step 35k (after clean-up). Score each SAE feature against the known Fourier ground truth — which frequencies does the SAE recover, and does it recover more of them after clean-up?
@@ -51,4 +61,4 @@ python -m src.analyze
 python -m src.plot
 ```
 
-About 90 seconds end-to-end on an RTX 5080.
+Roughly 66 seconds of training on an RTX 5080 at ~530 steps/sec (measured on my rig), plus a few seconds for analysis and plots.
