@@ -68,10 +68,16 @@ class HFBackend:
         prompt_len = self._tok(prompt, return_tensors="pt").input_ids.shape[1]
         with torch.no_grad():
             logits = self._model(**ids).logits[0]
+        # Upcast to fp32 before log_softmax so the accumulated sum of
+        # token log-probs doesn't get snapped to fp16's coarse grid at
+        # large magnitudes (where fp16 precision is ~0.25). Without this,
+        # fp16 and int8 backends report *identical* logprobs even though
+        # their logits differ, which makes the whole eval look insensitive.
+        logits = logits.float()
         log_probs = torch.log_softmax(logits, dim=-1)
         cont_ids = ids.input_ids[0, prompt_len:]
         token_lps = log_probs[prompt_len - 1 : -1].gather(-1, cont_ids[:, None]).squeeze(-1)
-        return float(token_lps.sum().item())
+        return float(token_lps.double().sum().item())
 
 
 def time_generate(backend: Backend, prompt: str, max_new_tokens: int = 64):

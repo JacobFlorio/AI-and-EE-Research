@@ -1,40 +1,18 @@
 
 === loading Qwen/Qwen2.5-0.5B @ fp16 ===
 `torch_dtype` is deprecated! Use `dtype` instead!
-  toy_mcq: {'n': 4, 'correct': 4, 'acc': 1.0}
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-  multi_step_arith: {'n': 20, 'correct': 0, 'acc': 0.0}
+  toy_mcq: {'n': 4, 'correct': 4, 'acc': 1.0, 'mean_margin': 3.7258160705678165}
+  arith_mcq: {'n': 30, 'correct': 12, 'acc': 0.4, 'mean_margin': 0.852812996506691}
+  perplexity: {'n_tokens_approx': 91, 'logprob': -314.72616980876774, 'perplexity_per_word': 31.77021890483736}
 
 === loading Qwen/Qwen2.5-0.5B @ int8 ===
-  toy_mcq: {'n': 4, 'correct': 4, 'acc': 1.0}
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
-Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
+  toy_mcq: {'n': 4, 'correct': 4, 'acc': 1.0, 'mean_margin': 3.8127790964208543}
+  arith_mcq: {'n': 30, 'correct': 13, 'acc': 0.43333333333333335, 'mean_margin': 0.9438233027855555}
+  perplexity: {'n_tokens_approx': 91, 'logprob': -314.7829929133877, 'perplexity_per_word': 31.790063368859126}
+
+=== loading Qwen/Qwen2.5-0.5B @ int4 ===
+  toy_mcq: {'n': 4, 'correct': 4, 'acc': 1.0, 'mean_margin': 4.013006571913138}
+  arith_mcq: {'n': 30, 'correct': 12, 'acc': 0.4, 'mean_margin': 0.6823177715142568}
+  perplexity: {'n_tokens_approx': 91, 'logprob': -336.43968172743917, 'perplexity_per_word': 40.33176450662521}
+
+saved → results/capability_matrix.json
