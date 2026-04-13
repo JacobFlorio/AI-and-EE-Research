@@ -1,4 +1,4 @@
-# EE × AI Research Portfolio
+# AI and EE Research
 
 Independent graduate-level research at the intersection of electrical engineering, machine learning, and AI safety. Built by [Jacob Florio](https://github.com/JacobFlorio) as a public record of research directions pursued outside a formal lab. Each subdirectory is a self-contained project with a research question, methodology, and reproducible results.
 
