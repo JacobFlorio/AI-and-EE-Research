@@ -14,3 +14,6 @@ datasets/
 .idea/
 .DS_Store
 node_modules/
+
+# reproducible from classifier + synth_data in ~30s
+sae-rf-classifier/results/activations.npz
