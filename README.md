@@ -53,6 +53,15 @@ Track: **Power electronics × RL**. An honest negative-ish result where the meth
 
 ---
 
+### 📶 [neural-beamforming-phased-array](https://github.com/JacobFlorio/neural-beamforming-phased-array)
+**A trained hybrid neural beamformer matches diagonally-loaded MVDR within IQR noise at low array calibration error and beats it by +1.6 dB at high error (20% per-element gain/phase mismatch). Plain MVDR collapses 24 dB across the same sweep — textbook Li-Stoica failure.**
+
+A 16-element ULA receiving a Gaussian signal plus 1–3 wideband interferers, with per-element gain/phase calibration errors representing real analog-front-end drift. Four beamformers compared on out-of-sample SINR across a sweep of calibration error magnitudes: CBF, plain MVDR, hand-tuned diagonally-loaded MVDR (the strong classical robust baseline), and a hybrid neural beamformer that parameterizes classical MVDR with a learned diagonal loading + steering-vector correction. The NN matches MVDR-DL up to 5% calibration error and starts winning past 10%, with a +1.6 dB advantage at the extreme 20% calibration error. Honest reversal of the original README: latency is 3× *worse* than MVDR-DL, not better, because the hybrid architecture wraps classical MVDR rather than replacing it. The writeup is open about both the win and the loss.
+
+Track: **RF / DSP × ML**. A genuinely open research question (robust beamforming under array calibration error) given a partial answer with documented honest caveats.
+
+---
+
 ## In-progress projects (scaffolded here)
 
 Each of the projects below has a README with a research question and runnable starter code, and will be promoted to its own repository once it has shippable results.
@@ -61,7 +70,6 @@ Each of the projects below has a README with a research question and runnable st
 |---|---|---|
 | [neural-rf-frontend](neural-rf-frontend/) | RF / SDR | Can a <500k-param CNN classify modulation at sub-0 dB SNR on an RTL-SDR? |
 | [tinyml-edge-anomaly](tinyml-edge-anomaly/) | Embedded | Sub-100 µJ/inference bearing fault detection on Cortex-M4? |
-| [neural-beamforming-phased-array](neural-beamforming-phased-array/) | RF / DSP | Can a learned beamformer match MVDR with 10× lower latency? |
 
 ## Focus
 Three overlapping tracks:
